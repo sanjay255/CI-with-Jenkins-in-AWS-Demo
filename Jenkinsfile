@@ -34,7 +34,7 @@ pipeline {
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io/secure-totality-266019', 'docker') {
+                    docker.withRegistry('https://gcr.io/secure-totality-266019', 'gj') {
                             myapp.push("${env.BUILD_ID}")
                     }
                 }
