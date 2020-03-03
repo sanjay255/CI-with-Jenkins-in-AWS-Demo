@@ -34,7 +34,7 @@ pipeline {
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io/gcs-k8s/', 'docker') {
+                    docker.withRegistry('https://gcr.io/gcs-k8s/', 'gcloudjenkins') {
                             myapp.push("${env.BUILD_ID}")
                     }
                 }
