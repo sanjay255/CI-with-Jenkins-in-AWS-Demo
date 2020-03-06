@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'secure-totality-266019'
-        CLUSTER_NAME = 'k8s-cluster-gcs'
-        LOCATION = 'europe-west2-c'
+        CLUSTER_NAME = 'cluster-k8s'
+        LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'kuberneteslogin'
     }
     stages {
