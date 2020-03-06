@@ -4,7 +4,7 @@ pipeline {
         PROJECT_ID = 'secure-totality-266019'
         CLUSTER_NAME = 'k8s-cluster-gcs'
         LOCATION = 'europe-west2-c'
-        CREDENTIALS_ID = 'k8s'
+        CREDENTIALS_ID = 'kuberneteslogin'
     }
     stages {
         stage("Checkout code") {
@@ -27,7 +27,7 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("hariharandevops/k8s:${env.BUILD_ID}")
+                    myapp = docker.build("hariharandevops/kubernetesrepos:${env.BUILD_ID}")
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
                 }
             }
         }        
-        stage('Deploy to GKE') {
+        stage('Deploy to Google Kubernetes') {
             steps{
 			    echo "Deployment started"
 				sh 'ls -ltr'
