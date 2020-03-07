@@ -2,9 +2,9 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'secure-totality-266019'
-        CLUSTER_NAME = 'k8s-cluster-gcs'
-        LOCATION = 'europe-west2-c'
-        CREDENTIALS_ID = 'k8s'
+        CLUSTER_NAME = 'cluster-k8s'
+        LOCATION = 'us-central1-c'
+        CREDENTIALS_ID = 'kuberneteslogin'
     }
     stages {
         stage("Checkout code") {
@@ -27,20 +27,20 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("hariharandevops/k8s:${env.BUILD_ID}")
+                    myapp = docker.build("hariharandevops/kubernetesrepos:${env.BUILD_ID}")
                 }
             }
         }
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('gcr.io/devopsdocker/', 'docker') {
+                    docker.withRegistry('https://gcr.io', 'docker') {
                             myapp.push("${env.BUILD_ID}")
                     }
                 }
             }
         }        
-        stage('Deploy to GKE') {
+        stage('Deploy to Google Kubernetes') {
             steps{
 			    echo "Deployment started"
 				sh 'ls -ltr'
@@ -48,9 +48,6 @@ pipeline {
                 sh "sed -i 's/tagversion/${env.BUILD_ID}/g' deployment.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
 				echo "Deployment Finished"
-            logstash{ 
-                       echo "Jenkins_K8s_deploy"
-                      }
             }
         }
     }    
