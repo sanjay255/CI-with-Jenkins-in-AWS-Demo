@@ -27,14 +27,14 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("hariharandevops/kubernetesrepos:${env.BUILD_ID}")
+                    myapp = docker.build("gcr.io/hariharandevops/kubernetesrepos:${env.BUILD_ID}")
                 }
             }
         }
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io', 'kuberneteslogin') {
+                    docker.withRegistry('https://gcr.io', 'gcr:kuberneteslogin') {
                             myapp.push("${env.BUILD_ID}")
                     }
                 }
