@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: webapp1
-        image: gcr.io/hariharandevops/kubernetesrepos:tagversion
+        image: gcr.io/secure-totality-266019/kubernetesrepos:tagversion
         ports:
         - containerPort: 8080
 ---
