@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: metricbeat-config
+ namespace: kube-system
+ labels:
+ k8s-app: metricbeat
+data:
+ metricbeat.yml: |-
+ metricbeat.config.modules:
+ # Mounted `metricbeat-daemonset-modules` configmap:
+ path: ${path.config}/modules.d/*.yml
+ # Reload module configs as they change:
+ reload.enabled: false
+ processors:
+ - add_cloud_metadata:
+ output.elasticsearch:
+ hosts: ["YOUR_ELASTICSEARCH_HOST"]
+ username: "YOUR_ELASTICSEARCH_USERNAME"
+ password: "YOUR_ELASTICSEARCH_PASSWORD"
+ setup.dashboards.enabled: true
+ setup.kibana.host: "YOUR_KIBANA_HOST"
+ setup.kibana.protocol: "https"
+ setup.kibana.username: "YOUR_KIBANA_USERNAME"
+ setup.kibana.password: "YOUR_KIBANA_PASSWORD"
+ setup.template.settings:
+ index.number_of_shards: 5
+ index.number_of_replicas: 1
+ index.number_of_routing_shards: 30
