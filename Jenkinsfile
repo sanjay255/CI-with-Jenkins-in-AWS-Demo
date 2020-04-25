@@ -1,54 +1,59 @@
 pipeline {
-    agent any
-    environment {
-        PROJECT_ID = 'secure-totality-266019'
-        CLUSTER_NAME = 'cluster-k8s'
-        LOCATION = 'us-central1-c'
-        CREDENTIALS_ID = 'kuberneteslogin'
+    agent any 	
+	environment {
+		
+		PROJECT_ID = 'protean-booth-260117'
+                CLUSTER_NAME = 'kubernetes-cluster'
+                LOCATION = 'europe-west2-b'
+                CREDENTIALS_ID = 'K8'
+	}
+	
+    stages {	
+	   stage('Scm Checkout') {            
+		steps {
+                  checkout scm
+		}	
+           }
+           
+	   stage('Build') { 
+                steps {
+                  echo "Cleaning and packaging..."
+                  sh 'mvn clean package'		
+                }
+           }
+	   stage('Test') { 
+		steps {
+	          echo "Testing..."
+		  sh 'mvn test'
+		}
+	   }
+	   stage('Build Docker Image') { 
+		steps {
+                   script {
+		      myimage = docker.build("tamilarasanece1989/devops:${env.BUILD_ID}")
+                   }
+                }
+	   }
+	   stage("Push Docker Image") {
+                steps {
+                   script {
+                      docker.withRegistry('https://registry.hub.docker.com', 'Docker') {
+                            myimage.push("${env.BUILD_ID}")		
+                     }
+			   
+                   }
+                }
+            }
+	   
+           stage('Deploy to K8s') { 
+                steps{
+                   echo "Deployment started ..."
+		   sh 'ls -ltr'
+		   sh 'pwd'
+		   sh "sed -i 's/tagversion/${env.BUILD_ID}/g' deployment.yaml"
+                   step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+		   echo "Deployment Finished ..."
+            }
+          }
     }
-    stages {
-        stage("Checkout code") {
-            steps {
-                checkout scm
-            }
-        }
-		 stage("Build") {
-            steps {
-               echo "cleaning and packaging"
-			   sh 'mvn clean package'
-            }
-        }
-		 stage("Test") {
-            steps {
-                echo "Testing"
-			   sh 'mvn test'
-            }
-        }
-        stage("Build image") {
-            steps {
-                script {
-                    myapp = docker.build("gcr.io/secure-totality-266019/kubernetesrepos:${env.BUILD_ID}")
-                }
-            }
-        }
-        stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://gcr.io', 'gcr:kuberneteslogin') {
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }        
-        stage('Deploy to Google Kubernetes') {
-            steps{
-			    echo "Deployment started"
-				sh 'ls -ltr'
-				sh 'pwd'
-                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' deployment.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-				echo "Deployment Finished"
-            }
-        }
-    }    
 }
