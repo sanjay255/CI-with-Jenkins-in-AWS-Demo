@@ -17,7 +17,7 @@ spec:
   spec:
    containers:
    - name: myapp1
-     image: sanjay255/devops:tagversion
+     image: sanjay255/k8s:tagversion
      ports:
      - containerPort: 8080
 
