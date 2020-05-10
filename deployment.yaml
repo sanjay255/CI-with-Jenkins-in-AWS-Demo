@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: myappgcr
+ name: myapp1
  labels:
-  app: myappgcr
+  app: myapp1
 spec:
  replicas: 2
  selector:
   matchLabels:
-   app: myappgcr
+   app: myapp1
  template:
   metadata: 
    labels:
-    app: myappgcr
+    app: myapp1
   spec:
    containers:
-   - name: myappgcr
-     image: gcr.io/devops-san-273920/devops:tagversion
+   - name: myapp1
+     image: sanjay255/devops:tagversion
      ports:
      - containerPort: 8080
 
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: myappgcr
+  name: myapp1
 spec:
   type: LoadBalancer
   selector:
-    app: myappgcr
+    app: myapp1
   ports:
     - protocol: TCP
       port: 80
