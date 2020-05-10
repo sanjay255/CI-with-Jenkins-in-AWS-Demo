@@ -3,7 +3,7 @@ pipeline {
 	environment {
 		
 		PROJECT_ID = 'canvas-advice-275919'
-                CLUSTER_NAME = 'k8-devops-demo'
+                CLUSTER_NAME = 'k8-cluster-demo'
                 LOCATION = 'europe-west2-c'
                 CREDENTIALS_ID = 'k8'
 	}
