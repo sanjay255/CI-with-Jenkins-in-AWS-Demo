@@ -38,7 +38,7 @@ pipeline {
                 steps {
                    script {
 		      docker.withRegistry('https://registry.hub.docker.com', 'eb69496a-60e6-442c-9b42-e69ae0aa128c') {
-                            myimage.push("${env.BUILD_ID}")		
+                            myapp.push("${env.BUILD_ID}")		
                      }
 			   
                    }
