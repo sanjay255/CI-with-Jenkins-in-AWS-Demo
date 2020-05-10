@@ -5,7 +5,7 @@ pipeline {
 		PROJECT_ID = 'canvas-advice-275919'
                 CLUSTER_NAME = 'k8-devops-demo'
                 LOCATION = 'europe-west2-c'
-                CREDENTIALS_ID = 'k8s-demo'
+                CREDENTIALS_ID = 'k8'
 	}
 	
     stages {	
