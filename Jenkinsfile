@@ -2,10 +2,10 @@ pipeline {
     agent any 	
 	environment {
 		
-		PROJECT_ID = 'devops-san-273920'
-                CLUSTER_NAME = 'k8s-cluster'
+		PROJECT_ID = 'valid-lodge-275917'
+                CLUSTER_NAME = 'k8-devops-demo'
                 LOCATION = 'europe-west2-c'
-                CREDENTIALS_ID = 'K8'
+                CREDENTIALS_ID = 'k8s-demo'
 	}
 	
     stages {	
@@ -30,14 +30,16 @@ pipeline {
 	   stage('Build Docker Image') { 
 		steps {
                    script {
-		      myimage = docker.build("gcr.io/devops-san-273920/devops:${env.BUILD_ID}")
+		      #myimage = docker.build("gcr.io/devops-san-273920/devops:${env.BUILD_ID}")
+                      myapp = docker.build("sanjay255/k8s:${env.BUILD_ID}")
                    }
                 }
 	   }
 	   stage("Push Docker Image") {
                 steps {
                    script {
-                      docker.withRegistry('https://gcr.io', 'gcr:K8') {
+                      #docker.withRegistry('https://gcr.io', 'gcr:K8') {
+		      docker.withRegistry('https://registry.hub.docker.com', 'docker') {
                             myimage.push("${env.BUILD_ID}")		
                      }
 			   
