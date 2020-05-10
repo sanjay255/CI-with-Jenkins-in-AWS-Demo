@@ -2,7 +2,7 @@ pipeline {
     agent any 	
 	environment {
 		
-		PROJECT_ID = 'valid-lodge-275917'
+		PROJECT_ID = 'canvas-advice-275919'
                 CLUSTER_NAME = 'k8-devops-demo'
                 LOCATION = 'europe-west2-c'
                 CREDENTIALS_ID = 'k8s-demo'
